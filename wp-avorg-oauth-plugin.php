@@ -14,7 +14,7 @@ class AVOauth2 {
     protected $token = false;
     protected $userObj;
     protected $api_response;
-
+    protected $return_uri;
     function __construct()
     {
         if (isset($_GET['token'])) {
@@ -95,8 +95,18 @@ class AVOauth2 {
     }
 
     public static function login_url() {
-        $return_uri = urlencode($_SERVER['REQUEST_URI']);
-        return '<a href="'.OAUTH2__AUTHORIZE_URI.'?client_id='.OAUTH2__CLIENT_ID.'&return_uri='.$return_uri.'">Login</a>';
+
+        return '<a href="'.OAUTH2__AUTHORIZE_URI.'?client_id='.OAUTH2__CLIENT_ID.'&return_uri='.urlencode($_SERVER['REQUEST_URI']).'">Login</a>';
+    }
+
+    public static function login_button_url() {
+
+        return '<a href="'.OAUTH2__AUTHORIZE_URI.'?client_id='.OAUTH2__CLIENT_ID.'&return_uri='.urlencode($_SERVER['REQUEST_URI']).'" class="woocommerce-Button button">Login</a>';
+    }
+    public static function login_url_sidebar() {
+
+        return '<a href="'.OAUTH2__AUTHORIZE_URI.'?client_id='.OAUTH2__CLIENT_ID.'&return_uri='.urlencode($_SERVER['REQUEST_URI']).'" class="nav-top-link nav-top-not-logged-in">
+                <span class="header-account-title">Login</span></a>';
     }
 
     public static function logout_url() {
@@ -106,5 +116,7 @@ class AVOauth2 {
 }
 
 add_shortcode( 'oauth2_login_url', array('AVOauth2', 'login_url'));
+add_shortcode( 'oauth2_login_button_url', array('AVOauth2', 'login_button_url'));
+add_shortcode( 'oauth2_login_url_sidebar', array('AVOauth2', 'login_url_sidebar'));
 add_shortcode( 'oauth2_logout', array('AVOauth2', 'logout_url'));
 add_action( 'plugins_loaded', array( 'AVOauth2', 'plugins_loaded' ));
